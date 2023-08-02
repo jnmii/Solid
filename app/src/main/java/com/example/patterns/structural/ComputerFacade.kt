@@ -1,48 +1,81 @@
 package com.example.patterns.structural
 
-class ComputerFacade(private val cpu: CPU, private val memory: Memory, private val hardDisk: HardDisk) {
-    fun startComputer() {
-        cpu.start()
-        memory.load()
-        hardDisk.read()
-        println("Computer is started and ready to use.")
+// Facade for the home theater system
+class HomeTheaterFacade(private val tv: TV, private val dvdPlayer: DVDPlayer, private val soundSystem: SoundSystem) {
+
+    fun watchMovie(movie: String) {
+        tv.turnOn()
+        dvdPlayer.play(movie)
+        soundSystem.setVolume(70)
+        soundSystem.setSurroundSound()
     }
 
-    fun shutdownComputer() {
-        cpu.shutdown()
-        memory.clear()
-        hardDisk.write()
-        println("Computer is shut down.")
-    }
-}
-// Complex subsystems
-
-class CPU {
-    fun start() {
-        println("CPU is starting...")
+    fun stopMovie() {
+        dvdPlayer.stop()
+        tv.turnOff()
+        soundSystem.setVolume(0)
     }
 
-    fun shutdown() {
-        println("CPU is shutting down...")
-    }
-}
-
-class Memory {
-    fun load() {
-        println("Memory is loading...")
+    fun listenToMusic() {
+        tv.turnOff()
+        dvdPlayer.stop()
+        soundSystem.setVolume(50)
     }
 
-    fun clear() {
-        println("Memory is cleared...")
+    fun turnOff() {
+        tv.turnOff()
+        dvdPlayer.stop()
+        soundSystem.setVolume(0)
+        soundSystem.turnOff()
     }
 }
 
-class HardDisk {
-    fun read() {
-        println("Hard Disk is reading...")
+// Subsystem components
+class TV {
+    fun turnOn() {
+        println("TV is turned on.")
     }
 
-    fun write() {
-        println("Hard Disk is writing...")
+    fun turnOff() {
+        println("TV is turned off.")
     }
 }
+
+class DVDPlayer {
+    fun play(movie: String) {
+        println("Playing movie: $movie")
+    }
+
+    fun stop() {
+        println("DVD player stopped.")
+    }
+}
+
+class SoundSystem {
+    fun setVolume(volume: Int) {
+        println("Volume set to $volume.")
+    }
+
+    fun setSurroundSound() {
+        println("Surround sound is enabled.")
+    }
+
+    fun turnOff() {
+        println("Sound system is turned off.")
+    }
+}
+
+fun main() {
+    val tv = TV()
+    val dvdPlayer = DVDPlayer()
+    val soundSystem = SoundSystem()
+
+    val homeTheater = HomeTheaterFacade(tv, dvdPlayer, soundSystem)
+
+    homeTheater.watchMovie("Avengers")
+    println()
+    homeTheater.listenToMusic()
+    println()
+    homeTheater.stopMovie()
+}
+
